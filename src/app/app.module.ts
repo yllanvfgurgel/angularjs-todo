@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule
+    ReactiveFormsModule //Importando para utilizar forms reativos no app component
   ],
   providers: [],
   bootstrap: [AppComponent]

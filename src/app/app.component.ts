@@ -9,6 +9,7 @@ import { Todo } from 'src/models/todo.model';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  public mode: string = 'list';
   public todos: Todo[] = [];
   public title: string = 'Minhas Tarefas';
   public form: FormGroup;
@@ -21,16 +22,19 @@ export class AppComponent {
         Validators.required
       ])] //Validator compose é utilizado quando se quer utilizar mais de um validator
     });
+
+    this.load();
   }
 
-  clear() { // Limpar o texto do formulário após salvar a tarefa
-    this.form.reset();
+  clear() { 
+    this.form.reset(); // Limpar o texto do formulário após salvar a tarefa
   }
 
   add() {
     const title = this.form.controls['title'].value;
     const id = this.todos.length + 1;
     this.todos.push(new Todo(id, title, false));
+    this.save();
     this.clear();
   }
 
@@ -39,13 +43,43 @@ export class AppComponent {
     if (index !== -1) {
       this.todos.splice(index, 1);
     }
+    this.save();
   }
 
   markAsDone(todo: Todo) {
     todo.done = true;
+    this.save();
   }
 
   markAsUndone(todo: Todo) {
+
     todo.done = false;
+    this.save();
+    
   }
+
+  save() {
+
+    const data = JSON.stringify(this.todos);
+    localStorage.setItem('todos', data);
+
+  }
+
+  load() {
+
+    const data = localStorage.getItem('todos');
+    if(data) {
+      this.todos = JSON.parse(data);
+    } else {
+      this.todos = [];
+    }
+
+  }
+
+  changeMode(mode: string) {
+
+    this.mode = mode;
+    
+  }
+
 }
